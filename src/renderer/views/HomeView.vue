@@ -5,8 +5,8 @@ import {useRouter} from 'vue-router'
 import {useThemeStore} from '@/renderer/stores/themeStore.ts';
 import {useApplicationActionsStore} from '@/renderer/stores/applicationActionsStore.ts';
 
+import WrapperGeneral from '@/renderer/components/base/wrappers/WrapperGeneral.vue';
 import NavWindowContainer from '@/renderer/components/base/NavWindowContainer.vue';
-import WrapperGeneral from '@/renderer/components/base/WrapperGeneral.vue';
 import ImageTitle from '@/renderer/components/base/images/imageTitle.vue';
 import IconButton from '@/renderer/components/base/buttons/IconButton.vue';
 import SecondaryButton from '@/renderer/components/base/buttons/SecondaryButton.vue';
@@ -17,7 +17,6 @@ import TextSeparator from '@/renderer/components/base/separators/TextSeparator.v
 const router = useRouter();
 const themeStore = useThemeStore();
 const applicationActionsStore = useApplicationActionsStore();
-
 
 const themeColors = themeStore.getColorsByTheme();
 
@@ -42,13 +41,6 @@ onMounted(async () => {
 				:fill-color-hex="themeColors.baseWhiteColor"
 			/>
 		</template>
-		<template #static-left-side>
-			<IconButton
-				@click="router.go(-1)"
-				:icon-name="'arrowBack'"
-				:fill-color-hex="themeColors.baseWhiteColor"
-			/>
-		</template>
 	</NavWindowContainer>
 	<WrapperGeneral>
 		<div class="main-action-container">
@@ -58,7 +50,7 @@ onMounted(async () => {
 			/>
 			<div class="main-action-container__add-pack-block">
 				<PrimaryField :placeholder="'Код сборки'"/>
-				<SecondaryButton :scale="'general'" @click="router.push({name: 'firstLaunchConfigure'})">
+				<SecondaryButton :scale="'general'" @click="router.push({name: 'launch'})">
 					Добавить
 				</SecondaryButton>
 			</div><!-- main-action-container__add-pack-block -->

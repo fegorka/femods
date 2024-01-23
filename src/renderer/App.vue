@@ -6,10 +6,11 @@ import {useThemeStore} from '@/renderer/stores/themeStore.ts';
 const themeStore = useThemeStore();
 const themeColors = themeStore.getColorsByTheme();
 
-let transitionAnimationName = 'slide-fade';
+let transitionAnimationName = 'route';
+
+import WrapperRoot from "@/renderer/components/base/wrappers/WrapperRoot.vue";
 
 // TODO | realise router dynamic transitions (https://learnvue.co/articles/vue-router-transitions)
-// FIXME | route transition doesn't work, idk why (https://vuejs.org/guide/built-ins/transition)
 
 </script>
 
@@ -22,9 +23,13 @@ let transitionAnimationName = 'slide-fade';
 		:rounded="'general'"
 	>
 		<div class="app-wrapper">
-			<router-view v-slot="{ Component }">
+			<router-view v-slot="{ Component, route }">
 				<transition :name="transitionAnimationName">
-					<component :is="Component"/>
+					<WrapperRoot :key="route.name">
+						<WrapperRoot class="animation-fade-in">
+							<component :is="Component"></component>
+						</WrapperRoot>
+					</WrapperRoot>
 				</transition>
 			</router-view>
 		</div><!-- app-wrapper -->
@@ -101,31 +106,120 @@ body {
 	-khtml-user-select: none;
 }
 
-.slide-fade-enter-active {
-	transition: all 0.3s ease-out;
+
+//.slide-fade-enter-active {
+//	transition: all 0.25s ease-out;
+//}
+//
+//.slide-fade-leave-active {
+//	transition: all 0.25s cubic-bezier(1, 0.5, 0.8, 1);
+//}
+//
+//.slide-fade-enter-from {
+//	opacity: 0;
+//}
+//
+//.slide-fade-enter-to {
+//	opacity: 0;
+//}
+//
+//.slide-fade-leave-from {
+//	transform: scale(1);
+//	opacity: 1;
+//}
+//
+//.slide-fade-leave-to {
+//	transform: scale(0.9);
+//	opacity: 0;
+//}
+
+.animation-fade-in {
+	animation: animation-fade-in 0.75s ease;
 }
 
-.slide-fade-leave-active {
-	transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+@keyframes animation-fade-in {
+	0% {
+		opacity: 0;
+		transform: scale(105%);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(100%);
+	}
 }
 
-.default-route-animation-enter-from {
+.route-enter-from {
 	opacity: 0;
-	transform: translateY(30%);
+	transform: scale(105%);
 }
 
-.default-route-animation-enter-active {
+.route-enter-active {
 	transition: all 0.2s ease-out;
 }
 
-.default-route-animation-leave-to {
+.route-leave-to {
 	opacity: 0;
-	transform: translateY(-30%);
+	transform: scale(105%);
 }
 
-.default-route-animation-leave-active {
+.route-leave-active {
 	transition: all 0.2s ease-in;
 }
+
+.slide-fade-enter-active {
+	transition: all 0.2s ease-out;
+}
+
+.slide-fade-leave-active {
+	transition: all 0.25s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from {
+	opacity: 0;
+	transform: scale(105%);
+}
+
+.slide-fade-enter-to {
+	opacity: 0;
+}
+
+.slide-fade-leave-from {
+	//	transform: scale(1);
+	transform: scale(105%);
+	opacity: 1;
+}
+
+.slide-fade-leave-to {
+	opacity: 0;
+	//	transform: translateY(-30%);
+	transform: scale(105%);
+}
+
+//.slide-fade-enter-active {
+//	transition: all 0.3s ease-out;
+//}
+//
+//.slide-fade-leave-active {
+//	transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+//}
+//
+//.default-route-animation-enter-from {
+//	opacity: 0;
+//	transform: translateY(30%);
+//}
+//
+//.default-route-animation-enter-active {
+//	transition: all 0.2s ease-out;
+//}
+//
+//.default-route-animation-leave-to {
+//	opacity: 0;
+//	transform: translateY(-30%);
+//}
+//
+//.default-route-animation-leave-active {
+//	transition: all 0.2s ease-in;
+//}
 
 .text {
 	// TODO | class was taken from another project, need to adapt it (except _pixels) and replace css variables with v-bind themeStore

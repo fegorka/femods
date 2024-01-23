@@ -5,8 +5,8 @@ import {useRouter} from 'vue-router'
 import {useThemeStore} from '@/renderer/stores/themeStore.ts';
 import {useApplicationActionsStore} from '@/renderer/stores/applicationActionsStore.ts';
 
+import WrapperGeneral from '@/renderer/components/base/wrappers/WrapperGeneral.vue';
 import NavWindowContainer from '@/renderer/components/base/NavWindowContainer.vue';
-import WrapperGeneral from '@/renderer/components/base/WrapperGeneral.vue';
 import IconButton from '@/renderer/components/base/buttons/IconButton.vue';
 
 const router = useRouter();
@@ -39,7 +39,9 @@ onMounted(async () => {
 		</template>
 	</NavWindowContainer>
 	<WrapperGeneral>
-		<h1 class="text _pixels">MenuView</h1>
+		<div class="animation-name">
+			<h1 class="text _pixels">MenuView</h1>
+		</div>
 	</WrapperGeneral>
 </template>
 

@@ -15,11 +15,6 @@ const routes = [
 		component: HomeView,
 	},
 	{
-		path: '/FirstLaunchConfigure',
-		name: 'firstLaunchConfigure',
-		component: FirstLaunchConfigureView,
-	},
-	{
 		path: '/menu',
 		name: 'menu',
 		component: MenuView,
