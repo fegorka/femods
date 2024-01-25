@@ -20,6 +20,25 @@ const applicationActionsStore = useApplicationActionsStore();
 
 const themeColors = themeStore.getColorsByTheme();
 
+
+window.ipcRenderer.on('download-progress', (event, progress) => {
+	console.log(event);
+	console.log('progress: ', progress);
+});
+
+window.ipcRenderer.on('open-update-available-modal', () => {
+	// open modal actions
+	alert('User confirm update');
+	window.ipcRenderer.invoke('start-update-process');
+	// open modal download progress check
+});
+
+window.ipcRenderer.on('alert', (event, message) => {
+	console.log(event);
+	alert(message);
+});
+
+
 onMounted(async () => {
 	console.log('HomeView mounted');
 });

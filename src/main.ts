@@ -1,21 +1,15 @@
 import {app, BrowserWindow, ipcMain} from 'electron'
-// import { BrowserWindow } from 'electron-acrylic-window';
+import {autoUpdater} from 'electron-updater';
 import path from 'node:path'
 
-// The built directory structure
-//
-// ├─┬─┬ dist
-// │ │ └── index.html
-// │ │
-// │ ├─┬ dist-electron
-// │ │ ├── main.js
-// │ │ └── preload.js
-// │
-process.env.DIST = path.join(__dirname, '../dist')
-process.env.VITE_PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST, '../public')
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
 
 
-let win: BrowserWindow | null
+process.env.DIST = path.join(__dirname, '../dist');
+process.env.VITE_PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST, '../public');
+
+let win: BrowserWindow;
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
@@ -42,10 +36,9 @@ function createWindow() {
 		},
 	})
 
-
-	// Test active push message to Renderer-process.
-	win.webContents.on('did-finish-load', () => {
+	win.webContents.on('did-finish-load', async () => {
 		win?.webContents.send('main-process-message', (new Date).toLocaleString())
+		await autoUpdater.checkForUpdatesAndNotify();
 	})
 
 	if (VITE_DEV_SERVER_URL) {
@@ -57,27 +50,62 @@ function createWindow() {
 	}
 }
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
 	closeApplication();
 })
 
 app.on('activate', () => {
-	// On OS X it's common to re-create a window in the app when the
-	// dock icon is clicked and there are no other windows open.
-	if (BrowserWindow.getAllWindows().length === 0) {
-		createWindow()
-	}
+	if (BrowserWindow.getAllWindows().length === 0) createWindow();
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(createWindow);
 
 function closeApplication() {
-	app.quit()
-	win = null
+	app.quit();
+//	win = null
 }
+
 
 ipcMain.handle('getOsName', async () => process.platform);
 ipcMain.handle('closeApplication', async () => closeApplication());
+
+
+ipcMain.handle('check-for-updates', async () => await autoUpdater.checkForUpdatesAndNotify());
+ipcMain.handle('start-update-process', () => autoUpdater.downloadUpdate());
+
+autoUpdater.on("update-available", ({releaseName}) => {
+	win.webContents.send('open-update-available-modal');
+	win.webContents.send('alert', `update-avilable ${releaseName}`);
+});
+
+autoUpdater.on("update-not-available", (info) => {
+	win.webContents.send('alert', `update-not-avilable ${JSON.stringify(info)}`);
+});
+
+autoUpdater.on("download-progress", (progress) => {
+	win.webContents.send('download-progress', Math.floor(progress.percent));
+});
+
+autoUpdater.on('update-downloaded', ({releaseName}) => {
+	win.webContents.send('alert', `update downloaded ${releaseName}`);
+	autoUpdater.quitAndInstall();
+});
+
+autoUpdater.on("error", async (error) => {
+	win.webContents.send('alert', `error ${JSON.stringify(error)}`);
+});
+
+
+//	const dialogOptions: Electron.MessageBoxOptions = {
+//		type: 'info',
+//		buttons: ['Restart', 'Later'],
+//		title: 'Application Update',
+//		//	message: process.platform === 'win32' ? releaseNotes : releaseName,
+//		message: 'aaa',
+//		detail:
+//			'A new version has been downloaded. Restart the application to apply the updates.'
+//	}
+//
+//	dialog.showMessageBox(win, dialogOptions).then((returnValue) => {
+//		if (returnValue.response === 0) update_application();
+//	})
