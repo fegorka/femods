@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import {onMounted} from 'vue';
 
-import {useThemeStore} from '@/renderer/stores/themeStore.ts';
-
 import WrapperGeneral from '@/renderer/components/base/wrappers/WrapperGeneral.vue';
-
-const themeStore = useThemeStore();
 
 
 onMounted(async () => {
