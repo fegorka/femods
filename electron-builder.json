@@ -12,9 +12,10 @@
   ],
   "mac": {
     "target": [
-      "dmg"
+      "dmg",
+      "zip"
     ],
-    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
+    "artifactName": "${productName}-Mac-${version}.${arch}-Installer.${ext}"
   },
   "win": {
     "target": [
