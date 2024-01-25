@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import GeneralContainer from '@/renderer/components/base/containers/GeneralContainer.vue';
 
 import {useThemeStore} from '@/renderer/stores/themeStore.ts';
+
+import GeneralContainer from '@/renderer/components/base/containers/GeneralContainer.vue';
 
 const themeStore = useThemeStore();
 const themeColors = themeStore.getColorsByTheme();
@@ -25,7 +26,7 @@ import WrapperRoot from "@/renderer/components/base/wrappers/WrapperRoot.vue";
 		<div class="app-wrapper">
 			<router-view v-slot="{ Component, route }">
 				<transition :name="transitionAnimationName">
-					<WrapperRoot :key="route.name">
+					<WrapperRoot :key="String(route.name)">
 						<WrapperRoot class="animation-fade-in">
 							<component :is="Component"></component>
 						</WrapperRoot>
