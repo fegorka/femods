@@ -8,6 +8,11 @@
     "email": "618.egorka@gmail.com",
     "url": "https://t.me/fegorka"
   },
+  "repository": "https://github.com/fegorka/femods",
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
+  },
   "scripts": {
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "lint:fix": "eslint --ext .ts,vue --fix --ignore-path .gitignore .",
