@@ -4,7 +4,6 @@ import {watch} from 'vue';
 import HomeView from '@/renderer/views/HomeView.vue';
 import MenuView from "@/renderer/views/MenuView.vue";
 import LaunchView from "@/renderer/views/LaunchView.vue";
-import FirstLaunchConfigureView from '@/renderer/views/FirstLaunchConfigureView.vue';
 
 console.log('routeeeer');
 
