@@ -22,6 +22,4 @@ app.mount('#app').$nextTick(() => {
 	});
 });
 
-// router.push({ name: 'FirstLaunchConfigure'});
-// router.push({ name: 'launch'});
-//await router.replace({name: 'home'});
+await router.replace({name: 'home'});
